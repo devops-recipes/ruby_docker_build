@@ -68,10 +68,6 @@ RUN echo 'gem: --no-document' > $HOME/.gemrc
 RUN gem update --system ${RUBYGEMS_VERSION}
 RUN gem install -v ${BUNDLER_VERSION} bundler
 
-RUN rm -rf /tmp/* /var/tmp/* /var/lib/apt /var/lib/dpkg /usr/share/man /usr/share/doc
-RUN rm /etc/my_init.d/00_regen_ssh_host_keys.sh
-RUN rm -r /etc/service/sshd
-
 RUN mkdir /root/app
 
 WORKDIR /root/app
