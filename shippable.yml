@@ -1,0 +1,48 @@
+language: ruby
+
+rvm:
+  - 2.3.3
+
+env:
+  global:
+    - APP_IMG: "devopsrecipes/rubydockerapp"
+    - NIGTHLY_TRIGGER_JOB: "ruby_docker_nightly_timer"
+
+integrations:
+  hub:
+    - integrationName: dr_dockerhub
+      type: dockerRegistryLogin
+
+build:
+  ci:
+    - bundle install --without production
+    - rails db:migrate
+    - rails test
+    - |
+        if ( [ $JOB_TRIGGERED_BY_NAME == $NIGTHLY_TRIGGER_JOB ] )
+        then
+          FROM_IMG="phusion/baseimage"
+          FROM_IMG_TAG="0.9.22"
+          APP_IMG_TAG="nightly"
+        else
+          FROM_IMG=$APP_IMG
+          FROM_IMG_TAG="nightly"
+          APP_IMG_TAG="latest"
+        fi
+    - docker build -t $APP_IMG:$APP_IMG_TAG --build-arg FROM_IMG=$FROM_IMG:$FROM_IMG_TAG
+    - docker push $APP_IMG:$APP_IMG_TAG
+
+resources:
+  - name: ruby_docker_nightly_timer
+    type: time
+    versionTemplate:
+      interval: "0 2 * * *"   # Triggers at 2 am GMT
+
+jobs:
+  - name: ruby_docker_build_runCI
+    type: runCI
+    steps:
+      - IN: ruby_docker_nightly_timer
+      - TASK:
+          script:
+            - ls
