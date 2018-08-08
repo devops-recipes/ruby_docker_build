@@ -58,7 +58,7 @@ RUN echo 'gem: --no-document' > $HOME/.gemrc
 RUN gem update --system ${RUBYGEMS_VERSION}
 RUN gem install -v ${BUNDLER_VERSION} bundler
 
-RUN mkdir /root/app
+RUN mkdir -p /root/app
 
 WORKDIR /root/app
 # Now update code dir and run gem install
