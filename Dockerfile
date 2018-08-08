@@ -27,16 +27,6 @@ RUN apt-get install -y --no-install-recommends $APT_PACKAGES
 RUN apt-get install -y --no-install-recommends $CURL_APT_PACKAGES
 
 RUN cd ~ && \
-    git clone https://github.com/tatsuhiro-t/nghttp2.git && \
-    cd nghttp2 && \
-    autoreconf -i && \
-    automake && \
-    autoconf && \
-    ./configure && \
-    make && \
-    make install
-
-RUN cd ~ && \
     apt-get build-dep -y curl
 
 RUN wget http://curl.haxx.se/download/curl-7.60.0.tar.bz2 && \
