@@ -6,7 +6,7 @@ rvm:
 env:
   global:
     - APP_IMG: "devopsrecipes/rubydockerapp"
-    - NIGTHLY_TRIGGER_JOB: "ruby_docker_nightly_timer"
+    - NIGHTLY_TRIGGER_JOB: "ruby_docker_nightly_timer"
 
 integrations:
   hub:
@@ -19,18 +19,17 @@ build:
     - rails db:migrate
     - rails test
     - |
-        if ( [ $JOB_TRIGGERED_BY_NAME == $NIGTHLY_TRIGGER_JOB ] )
+        if ( [ $JOB_TRIGGERED_BY_NAME == $NIGHTLY_TRIGGER_JOB ] )
         then
-          FROM_IMG="phusion/baseimage"
-          FROM_IMG_TAG="0.9.22"
-          APP_IMG_TAG="nightly"
+          docker build -t devopsrecipes/rubydockerapp:nightly --build-arg FROM_IMG=phusion/baseimage:0.9.22 .
+          docker push devopsrecipes/rubydockerapp:nightly
         else
-          FROM_IMG=$APP_IMG
-          FROM_IMG_TAG="nightly"
-          APP_IMG_TAG="latest"
+          docker build -t devopsrecipes/rubydockerapp:nightly --build-arg FROM_IMG=phusion/baseimage:0.9.22 .
+          docker push devopsrecipes/rubydockerapp:nightly
+
+          docker build -t devopsrecipes/rubydockerapp:latest --build-arg FROM_IMG=devopsrecipes/rubydockerapp:nightly .
+          docker push devopsrecipes/rubydockerapp:latest
         fi
-    - docker build -t $APP_IMG:$APP_IMG_TAG --build-arg FROM_IMG=$FROM_IMG:$FROM_IMG_TAG
-    - docker push $APP_IMG:$APP_IMG_TAG
 
 resources:
   - name: ruby_docker_nightly_timer
