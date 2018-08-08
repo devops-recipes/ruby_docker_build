@@ -1,4 +1,4 @@
-ARG $FROM_IMG=devopsrecipes/rubydockerapp:nightly #phusion/baseimage:0.9.22
+ARG $FROM_IMG=devopsrecipes/rubydockerapp:nightly
 FROM ${FROM_IMG}
 
 ENV RUBY_MAJOR "2.3"
