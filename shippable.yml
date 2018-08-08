@@ -24,9 +24,6 @@ build:
           docker build -t devopsrecipes/rubydockerapp:nightly --build-arg FROM_IMG=phusion/baseimage:0.9.22 .
           docker push devopsrecipes/rubydockerapp:nightly
         else
-          docker build -t devopsrecipes/rubydockerapp:nightly --build-arg FROM_IMG=phusion/baseimage:0.9.22 .
-          docker push devopsrecipes/rubydockerapp:nightly
-
           docker build -t devopsrecipes/rubydockerapp:latest --build-arg FROM_IMG=devopsrecipes/rubydockerapp:nightly .
           docker push devopsrecipes/rubydockerapp:latest
         fi
