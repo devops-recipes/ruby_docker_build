@@ -1,4 +1,4 @@
-ARG $FROM_IMG=devopsrecipes/rubydockerapp:nightly
+ARG FROM_IMG
 FROM ${FROM_IMG}
 
 ENV RUBY_MAJOR "2.3"
@@ -22,10 +22,7 @@ ENV CURL_APT_PACKAGES " \
 
 ENV APT_REMOVE_PACKAGES "openssh-server postfix"
 
-COPY apt.conf /etc/apt/apt.conf.d/local
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-COPY yarn.list /etc/apt/sources.list.d
-RUN apt-get update && apt-get -y dist-upgrade
+RUN apt-get update
 RUN apt-get install -y --no-install-recommends $APT_PACKAGES
 RUN apt-get install -y --no-install-recommends $CURL_APT_PACKAGES
 
